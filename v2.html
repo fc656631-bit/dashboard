@@ -1,3 +1,4 @@
+<!-- ================= ORIGINAL DASHBOARD (v1) ================= -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,250 +15,13 @@
 
     body {
       margin: 0;
-      background: #0f172a;
-      color: #e5e7eb;
-      height: 100vh;
-      display: grid;
-      grid-template-rows: auto 1fr;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 30px;
-      background: #020617;
-      border-bottom: 1px solid #1e293b;
-    }
-
-    .time {
-      font-size: 2.5rem;
-      font-weight: 600;
-    }
-
-    .date {
-      font-size: 1rem;
-      color: #94a3b8;
-    }
-
-    .weather {
-      text-align: right;
-    }
-
-    main {
-      padding: 30px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      grid-gap: 25px;
-    }
-
-    .card {
-      background: #020617;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.4);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .card h2 {
-      margin: 0 0 15px;
-      font-size: 1.2rem;
-      color: #38bdf8;
-    }
-
-    /* Spotify */
-    .spotify iframe {
-      border-radius: 12px;
-      border: none;
-      width: 100%;
-      height: 380px;
-    }
-
-    /* Now Playing */
-    .now-playing {
-      text-align: center;
-      gap: 10px;
-    }
-
-    .now-playing img {
-      width: 150px;
-      height: 150px;
-      border-radius: 12px;
-      margin: 10px auto;
-    }
-
-    .track {
-      font-weight: 600;
-      font-size: 1.1rem;
-    }
-
-    .artist {
-      color: #94a3b8;
-    }
-
-    footer {
-      text-align: center;
-      padding: 10px;
-      font-size: 0.8rem;
-      color: #64748b;
-    }
-  </style>
-</head>
-<body>
-
-  <!-- HEADER -->
-  <header>
-    <div>
-      <div class="time" id="time">00:00</div>
-      <div class="date" id="date">Loading...</div>
-    </div>
-
-    <div class="weather" id="weather">
-      ⛅ --°C<br>
-      Loading weather...
-    </div>
-  </header>
-
-
-  <!-- MAIN GRID -->
-  <main>
-
-    <!-- SPOTIFY PLAYER -->
-    <div class="card spotify">
-      <h2>🎵 Spotify</h2>
-
-      <!-- Replace playlist URL with yours -->
-      <iframe
-        src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M"
-        allow="encrypted-media">
-      </iframe>
-    </div>
-
-
-    <!-- NOW PLAYING -->
-    <div class="card now-playing">
-      <h2>▶ Now Playing</h2>
-
-      <!-- Demo placeholder -->
-      <img id="albumArt" src="https://via.placeholder.com/150" />
-
-      <div class="track" id="track">Not Connected</div>
-      <div class="artist" id="artist">Spotify API Required</div>
-    </div>
-
-
-    <!-- NOTES (OPTIONAL EXTRA) -->
-    <div class="card">
-      <h2>📝 Quick Notes</h2>
-
-      <textarea id="notes" placeholder="Write something..."
-        style="width:100%;height:100%;background:#020617;color:#e5e7eb;border:1px solid #1e293b;border-radius:10px;padding:10px;resize:none;">
-      </textarea>
-    </div>
-
-  </main>
-
-
-  <footer>
-    Personal Dashboard • Dark Mode
-  </footer>
-
-
-  <!-- JAVASCRIPT -->
-  <script>
-
-    /* CLOCK */
-    function updateTime() {
-      const now = new Date();
-
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-
-      document.getElementById('time').textContent = `${hours}:${minutes}`;
-
-      document.getElementById('date').textContent =
-        now.toLocaleDateString(undefined, {
-          weekday: 'long',
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        });
-    }
-
-    setInterval(updateTime, 1000);
-    updateTime();
-
-
-    /* WEATHER (OpenWeather API) */
-
-    const API_KEY = "YOUR_API_KEY_HERE"; // Get from openweathermap.org
-    const CITY = "Warsaw";
-
-    async function getWeather() {
-      if (API_KEY === "YOUR_API_KEY_HERE") return;
-
-      try {
-        const res = await fetch(
-          `https://api.openweathermap.org/data/2.5/weather?q=${CITY}&units=metric&appid=${API_KEY}`
-        );
-
-        const data = await res.json();
-
-        document.getElementById('weather').innerHTML = `
-          ${data.weather[0].icon.includes('d') ? '☀️' : '🌙'} ${Math.round(data.main.temp)}°C<br>
-          ${data.weather[0].description}
-        `;
-      }
-      catch {
-        document.getElementById('weather').textContent = "Weather error";
-      }
-    }
-
-    getWeather();
-    setInterval(getWeather, 600000);
-
-
-    /* NOTES SAVE */
-
-    const notes = document.getElementById('notes');
-
-    notes.value = localStorage.getItem('notes') || "";
-
-    notes.addEventListener('input', () => {
-      localStorage.setItem('notes', notes.value);
-    });
-
-  </script>
-</body>
-</html>
-
-<!-- ================= V2 COZY DASHBOARD (v2.html) ================= -->
-
-<!-- Save the following as v2.html in the same folder -->
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cozy Dashboard V2</title>
-
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
-
-  <style>
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
       min-height: 100vh;
-      font-family: 'Inter', sans-serif;
-      color: #f5f2e9;
-      background: linear-gradient(180deg, #c28f5c 0%, #3a2f45 40%, #14121a 100%);
+      font-family: 'Playfair Display', serif;
+      color: #f6efe3;
+      background: radial-gradient(circle at top, #d2a679 0%, #5a445e 45%, #120f18 100%);
       display: grid;
       grid-template-rows: auto 1fr;
-      transition: background 5s ease;
+      transition: background 8s ease;
     }
 
     header {
@@ -286,15 +50,15 @@
     }
 
     .card {
-      background: rgba(30, 25, 35, 0.85);
-      border-radius: 18px;
-      padding: 22px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-      backdrop-filter: blur(8px);
+      background: rgba(50, 38, 28, 0.85);
+      border-radius: 22px;
+      padding: 26px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+      backdrop-filter: blur(12px);
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 10px;
+      gap: 14px;
     }
 
     .card h3 {
@@ -328,9 +92,11 @@
 
     footer {
       text-align: center;
-      padding: 10px;
-      font-size: 0.8rem;
-      color: #b8ae9e;
+      padding: 14px;
+      font-size: 0.85rem;
+      color: #d6c4a8;
+      font-style: italic;
+      letter-spacing: 0.04em;
     }
   </style>
 </head>
@@ -383,7 +149,7 @@
 </main>
 
 <footer>
-  Cozy Dashboard V2
+  Cozy Dashboard V2 • Library Edition
 </footer>
 
 <script>
